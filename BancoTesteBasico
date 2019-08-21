@@ -1,0 +1,32 @@
+/*drop database bancoteste;*//*Temos tambem o comando de drop para excluir a tabela*/
+
+create database bancoteste;
+
+use bancoteste;
+
+create table fornecedores(
+codigo int(4) auto_increment, /**/
+nome varchar(30) not null,
+email varchar (50),
+primary key (codigo)
+);
+
+insert into fornecedores (codigo, nome, email) values (null, "Ricardo","ricardorico@gmail.com");
+insert into fornecedores (codigo, nome, email) values (null, "João","jao@gmail.com");
+insert into fornecedores (codigo, nome, email) values (null,"Maria", "maria@gmail.com");
+
+select * from fornecedores;
+
+select email from fornecedores;
+
+select * from fornecedores order by nome asc; /*Seram ordenados pelo nome*/
+
+/*para ser alterado algum registro basta usar o update*/
+update fornecedores set nome="Jorgim da massa" where codigo=1;
+
+select *from fornecedores;
+
+/*Para deletar*/
+delete from fornecedores where codigo=3;
+
+select * from  fornecedores;
