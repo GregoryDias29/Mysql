@@ -1,0 +1,25 @@
+create database cadastro 
+default character set utf8
+default collate utf8_general_ci;
+
+use cadastro;
+/*drop database cadastro;*/
+/*drop table pessoas;*/
+
+create table pessoas (
+id int not null auto_increment,
+nome varchar (30) not null,
+idade date,
+sexo enum ('H','M'),
+peso decimal (5,2), /*o que seria 5,2 seria um total de 5 casa e o segundo numero seria 2 apos a virgula [][][],[][] */
+altura decimal(3,2),
+nacionalidade varchar (20) default 'Brasil',
+primary key (id)
+)default charset = utf8;
+
+/*na data se utiliza primeiro ano, mes e dia */
+insert into pessoas 
+(nome, idade,sexo,peso,altura,nacionalidade)
+value ('jorgim da massa','1984-01-05','H','69.5','1.80','Brasil');
+insert into pessoas values (default,'Joaquina','1998-05-30','M','75.5','1.99',default);
+select * from  pessoas;
