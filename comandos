@@ -18,40 +18,121 @@ primary key (id)
 )default charset = utf8;
 
 /*na data se utiliza primeiro ano, mes e dia */
-insert into pessoas /*(nome,idade, sexo, peso , altura,nacionalidade)*/ value ('jorgim da massa ','1971-05-28','M','78.05','1.83','Brasil');
-insert into pessoas value ('cleusedyte','1978-08-28','M','76.05','1.60','Portugual');
-insert into pessoas value ('Jubileu não fui eu ','1971-05-28','M','78.05','1.83','default');
-insert into pessoas value 
-('default','pode ser','1971-05-27','M','58.05','1.83','default'),
-('default','colocar assim','1971-05-16','M','98.05','1.83','default'),
-('default','tambem','1971-05-18','M','88.05','1.83','default');
-select * from pessoas;
-
-/*describe ou  */desc pessoas;
-
-alter table pessoas 
-add column profissao varchar(10);/* add coluna em ultimo*/
+insert into pessoas
+(nome, idade, sexo, peso, altura, nacionalidade )
+values
+('maria', '1999-01-02','M','55.5','1.65','Portugal');
 
 select * from pessoas;
+/*Caso queira colocar o ID posso colocar o default para falar para ele colocar o proxio numero*/
+insert into pessoas (id,nome, idade, sexo, peso, altura, nacionalidade ) values (DEFAULT,'Creusa', '1920-01-05','M','55.5','1.55','Portugal');
 
-/*para posisionar em primeiro usase o fi*/
+/*Se o dado a entrar for exatamente igual ao da tabela na mesma ordem não a necessida de informar id...... basta colocar values */
 
-/*remover*/
-alter table pessoas
-drop column profissao;
+insert into  pessoas values (default,'Molk', '1975-09-05','h','75.5','1.75','EUA');
 
-/*add em outra posiç]ao por exemplo depois do nome */
-alter table pessoas 
-add column profissao varchar (10) after nome;
-/*add em primeiro */
-alter table pessoas
-add column /*não precisa ter column*/codigo int first;
+insert into  pessoas values 
+(default,'alana', '1975-09-05','m','75.5','1.75','EUA'),
+(default,'livinho', '1975-09-05','h','75.5','1.75','japão'),
+(default,'nativo', '1975-09-05','m','75.5','1.75','irlanda'),
+(default,'marcinho da 9', '1975-09-05','h','75.5','1.75','alaska');
 
-/*para alterar a estrutura */
-alter table pessoas
-modify column profissao varchar(20) not null default '';/*ele vai aparecer um aviso pois antes ja tinha sido usado o campo e ao atulizar os campos esv]ao vazio e colocamos que não podeia esta vazio */
 
-/*modifica ro nome de coluna*/
-alter table pessoas
-change column profissao/*antigo*//*novo*/ prof varchar (20) not null default'';
+desc /*ou describe*/ pessoas;
 
+alter table pessoas add column profissao varchar (10); /*add uma tabela  em ultimo*/
+
+alter table pessoas drop column profissao; /*excluir coluna*/
+
+alter table pessoas add column profissao varchar (10) after nome; /*add em qualquer possição menos na primeira */
+
+alter table pessoas add /*column opicional*/ codigo int first; /*add em primeiro */
+
+
+alter table pessoas modify column profissao varchar (20); /*para alterar a estrutura da definição */
+
+
+alter table pessoas change column profissao prof varchar (20);  /*nome de uma coluna*/
+
+alter table pessoas rename to gafanhotos;/*renomear a tabela inteira*/
+
+desc gafanhotos;
+
+/*so ira criar uma tabela se ele não existir */
+create table if not exists cursos (
+nome varchar (30) not null unique,/*não confundir com primery key alem de ser unique ele tem outras caracts o unique não é uma chave prime mas ele não vai deixar dois com o mesmo nome  */
+descricao text, /*para textos longos */
+carga int unsigned, /*(horario) unsigned sem sinal com isso vai se vai economizar 1 byt */
+totaulas int,
+ano year default'2016'
+)default charset = utf8;
+
+desc cursos;
+
+alter table cursos add column id int first;
+
+alter table cursos add primary key (id); /*para add uma primery key*/
+
+create table if not exists teste(id int);
+
+drop table teste; /*apagar tabela*/
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+select * from gafanhotos;
+
+/*manipular linhas*/
+
+select * from cursos;
+
+desc cursos;
+
+insert into cursos values
+('1','HTML4','Cursos de HTML5','40','37','2014'),
+('2','algoritimo','logica de prog','20','15','2014'),
+('3','photo','Dicas de photo','10','30','2019'),
+('4','pgp','curso PHP','40','56','2019'),
+('5','jarva','intro a java','10','25','2018'),
+('6','Mysql','Banco de dados ','20','33','2017'),
+('7','Word','curso de word','30','16','2016'),
+('8','sapateado','dança','50','5','2018'),
+('9','cozinha','aprender a fazer','20','30','2018'),
+('10','youtube','gerar','10','2','2016');
+
+/*mudar linha*/
+
+update cursos set nome='html5' where id = 1;
+
+update cursos set carga = '45' where id =1;
+
+update cursos set nome = 'php', ano = '2015' where id = 4;
+
+update cursos set nome = 'Java', ano = '2015', carga = '40' where id = '5' limit 1;/*Limit quantas linhas vão poder ser alteradas ou seja ele vai limitar quantas linhas sera alteradas */
+
+update cursos set ano = '2050', carga = '800' where ano = '2018'; /*se eu der este comando tudo que tiver ano = 2018 sera alterado */
+/*porem ele vai apontar um erro , ta mais para um aviso para remover este aviso  basta ir em:
+edit 
+preferences...
+SQL editor 
+tem um check em *Safe updates*.forbid ....  
+desmarca 
+clicar no botão reconectar para o dbms (decimo botão)
+ai tenta
+*/
+
+update cursos set ano = '2018', carga = '0' where ano = '2050' limit 1; /*ao usar este codigo iremos limitar a alteração apenas para 1 mlinha*/
+
+/*apagar linhas*/
+
+delete from cursos where id  = 8;
+
+delete from cursos where ano = '2050'; /*esta opção precisa tambem que seja desmarcado no edit*/
+
+/*SEMPRE USAR O LIMIT POIS ASSIM LIMITAMOS O DROP OU O UPDATE*/
+
+/*remover todas as linhas*/
+
+truncate table cursos; /*o truncate irar truncar a tabela ou seja apagar todos os registros (PODE SER ATE INCURTADO COM truncate CURSOS;)*/
+
+/*drop table apaga a tabela inteira (apaga os dados e tambem a estrutura da tabela)
+/*truncate table ele mantem a estrutura mas apaga os dados por isso ele não é ddl */
